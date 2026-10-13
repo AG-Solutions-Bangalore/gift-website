@@ -9,9 +9,13 @@ const API_TOKEN = import.meta.env.VITE_API_TOKEN || '';
  * Subscribe email to newsletter
  * @param {string} email
  */
-export async function createNewsletter(email) {
+export async function createNewsletter(emailOrPayload) {
   try {
-    if (!email || !email.includes('@')) {
+    const email = typeof emailOrPayload === 'object' && emailOrPayload !== null
+      ? (emailOrPayload.newsletter_email || emailOrPayload.email || '')
+      : (emailOrPayload || '');
+
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
       throw new Error('Please enter a valid email address.');
     }
 
@@ -35,15 +39,15 @@ export async function createNewsletter(email) {
 
     const data = await response.json().catch(() => null);
 
-    if (!response.ok) {
-      const msg = data?.message || data?.error || `HTTP ${response.status}: Failed to subscribe`;
+    if (!response.ok || (data && data.code && data.code >= 400)) {
+      const msg = data?.message || data?.data?.message || data?.error || `HTTP ${response.status}: Failed to subscribe`;
       throw new Error(msg);
     }
 
     return {
       success: true,
       data,
-      message: data?.message || 'Thank you for subscribing to our newsletter!',
+      message: data?.message || data?.data?.message || 'Thank you for subscribing to our newsletter!',
     };
   } catch (error) {
     console.error('Failed to subscribe newsletter:', error);

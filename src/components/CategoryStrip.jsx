@@ -1,107 +1,78 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCategories } from '../context/CategoryContext';
+import FixedImage from './common/FixedImage';
 
-// Only include the active catalog categories + Same Day delivery
-const ACTIVE_CATEGORIES = [
+const CATEGORIES = [
   {
     id: 'same-day',
     name: 'Same Day',
     slug: 'same-day',
     image: '/images/home/image2.png',
-    bgGradient: 'from-amber-50 to-amber-100/60',
-    borderColor: 'border-amber-300/80 group-hover:border-amber-400 group-hover:shadow-amber-100',
-    textColor: 'group-hover:text-amber-700',
-  },
-  {
-    id: 'flowers',
-    name: 'Flowers',
-    slug: 'flowers',
-    image: '/images/home/image3.png',
-    bgGradient: 'from-rose-50 to-rose-100/60',
-    borderColor: 'border-rose-300/80 group-hover:border-rose-400 group-hover:shadow-rose-100',
-    textColor: 'group-hover:text-rose-700',
+    borderColor: 'border-[#fbbf24]', // Warm yellow/gold
+    isSpecial: true,
   },
   {
     id: 'cakes',
     name: 'Cakes',
     slug: 'cakes',
     image: '/images/home/image4.png',
-    bgGradient: 'from-orange-50 to-orange-100/60',
-    borderColor: 'border-orange-300/80 group-hover:border-orange-400 group-hover:shadow-orange-100',
-    textColor: 'group-hover:text-orange-700',
+    borderColor: 'border-[#fdba74]', // Soft orange/peach
+    isSpecial: false,
+  },
+  {
+    id: 'flowers',
+    name: 'Flowers',
+    slug: 'flowers',
+    image: '/images/home/image3.png',
+    borderColor: 'border-[#f472b6]', // Pink/rose
+    isSpecial: false,
   },
   {
     id: 'frames',
     name: 'Frames',
     slug: 'frames',
     image: '/images/home/image5.png',
-    bgGradient: 'from-purple-50 to-purple-100/60',
-    borderColor: 'border-purple-300/80 group-hover:border-purple-400 group-hover:shadow-purple-100',
-    textColor: 'group-hover:text-purple-700',
+    borderColor: 'border-[#c084fc]', // Purple/lavender
+    isSpecial: false,
   },
   {
     id: 'chocolates',
     name: 'Chocolates',
     slug: 'chocolates',
     image: '/images/home/image7.png',
-    bgGradient: 'from-rose-50 to-pink-100/60',
-    borderColor: 'border-rose-300/80 group-hover:border-rose-400 group-hover:shadow-rose-100',
-    textColor: 'group-hover:text-rose-700',
+    borderColor: 'border-[#fde047]', // Gold/yellow
+    isSpecial: false,
   },
 ];
 
 export default function CategoryStrip() {
-  const { topCategories } = useCategories();
-
-  // If CRM categories exist, map active top category slugs dynamically (while preserving same-day)
-  const displayItems = ACTIVE_CATEGORIES.map((item) => {
-    if (item.id === 'same-day') {
-      return item;
-    }
-
-    const matchedTop = (topCategories || []).find((c) => {
-      const name = (c.name || '').toLowerCase();
-      const slug = (c.slug || '').toLowerCase();
-      return name.includes(item.name.toLowerCase()) || slug.includes(item.slug.toLowerCase());
-    });
-
-    return {
-      ...item,
-      slug: matchedTop?.slug || item.slug,
-      name: matchedTop?.name || item.name,
-    };
-  });
-
   return (
-    <div className="bg-white py-5 sm:py-7 border-b border-gray-100 select-none">
+    <div className="bg-white py-6 sm:py-8 border-b border-gray-100 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center overflow-x-auto gap-6 sm:gap-10 md:gap-14 lg:gap-16 justify-center scrollbar-none pb-2 pt-1">
-          {displayItems.map((item) => (
+        <div className="flex items-center justify-center gap-8 sm:gap-14 md:gap-20 overflow-x-auto scrollbar-none py-2">
+          {CATEGORIES.map((item) => (
             <Link
               to={`/category/${item.slug}`}
               key={item.id}
-              className="flex flex-col items-center text-center group cursor-pointer flex-shrink-0 transition-transform duration-300 hover:-translate-y-1"
+              className="flex flex-col items-center text-center group cursor-pointer flex-shrink-0 transition-transform duration-300 hover:-translate-y-1.5"
             >
-              {/* Circular 3D Icon Card with Pastel Glow Ring */}
+              {/* Circular Ring Frame */}
               <div
-                className={`w-[72px] h-[72px] sm:w-[82px] sm:h-[82px] lg:w-[90px] lg:h-[90px] rounded-full bg-gradient-to-b ${item.bgGradient} border-2 ${item.borderColor} p-2.5 flex items-center justify-center shadow-xs group-hover:shadow-lg transition-all duration-300 relative overflow-hidden`}
+                className={`w-[85px] h-[85px] sm:w-[100px] sm:h-[100px] md:w-[110px] md:h-[110px] rounded-full bg-white border-2 ${item.borderColor} p-1.5 flex items-center justify-center shadow-xs group-hover:shadow-md transition-all duration-300 relative overflow-hidden`}
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  loading="lazy"
-                  className="w-full h-full object-contain filter group-hover:scale-110 group-hover:drop-shadow-sm transition-transform duration-300 select-none"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-stone-50/50 relative">
+                  <FixedImage
+                    src={item.image}
+                    alt={item.name}
+                    type="category"
+                    containerClassName="w-full h-full flex items-center justify-center"
+                    imageClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
+                  />
+                </div>
               </div>
 
-              {/* Label Underneath */}
-              <span
-                className={`text-[12px] sm:text-[13px] font-bold text-gray-800 mt-2.5 font-sans tracking-tight transition-colors duration-200 line-clamp-1 max-w-[90px] ${item.textColor}`}
-              >
+              {/* Title */}
+              <span className="text-sm sm:text-base font-bold text-[#0f172a] mt-3 font-sans tracking-tight group-hover:text-olive-700 transition-colors">
                 {item.name}
               </span>
             </Link>
@@ -111,4 +82,3 @@ export default function CategoryStrip() {
     </div>
   );
 }
-

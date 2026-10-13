@@ -16,6 +16,7 @@ import {
   Calendar,
   Briefcase,
   ShoppingCart,
+  Heart,
   User,
   MoreHorizontal,
   Menu,
@@ -36,6 +37,8 @@ export default function Header() {
   const { 
     openCart, 
     cartCount, 
+    openWishlist,
+    wishlistCount,
     selectedLocation, 
     openLocationModal, 
     openRemindersModal,
@@ -282,21 +285,45 @@ export default function Header() {
             )}
           </div>
 
-          {/* 3. Luxury Dual-Tone Cart Pill */}
+          {/* 3. Wishlist Pill */}
+          <button
+            onClick={openWishlist}
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-stone-50 hover:bg-rose-50/80 border border-stone-200 hover:border-rose-200 shadow-2xs transition-all duration-200 cursor-pointer active:scale-95 group text-stone-700 hover:text-rose-600"
+            aria-label="View Wishlist"
+            title="View Wishlist"
+          >
+            <div className="w-7 h-7 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+              <Heart className={`w-3.5 h-3.5 stroke-[2.2] ${wishlistCount > 0 ? 'fill-rose-500' : ''}`} />
+            </div>
+            <span className="text-xs font-bold font-sans tracking-wide">
+              Saved
+            </span>
+            <span
+              className={`px-1.5 py-0.5 rounded-full text-[10px] font-black leading-none transition-all ${
+                wishlistCount > 0
+                  ? 'bg-rose-500 text-white shadow-2xs'
+                  : 'bg-stone-200/80 text-stone-600'
+              }`}
+            >
+              {wishlistCount}
+            </span>
+          </button>
+
+          {/* 4. Luxury Dual-Tone Enquiries Pill */}
           <button
             onClick={openCart}
             className="flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full bg-stone-50 hover:bg-stone-100/90 border border-stone-200 shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer active:scale-95 group"
-            aria-label="View Shopping Cart"
-            title="View Shopping Cart"
+            aria-label="View Enquiry Shortlist"
+            title="View Enquiry Shortlist"
           >
             {/* Emerald Icon Circle */}
             <div className="w-7 h-7 rounded-full bg-olive-750 group-hover:bg-olive-800 text-white flex items-center justify-center transition-colors shadow-2xs">
               <ShoppingCart className="w-3.5 h-3.5 stroke-[2.2]" />
             </div>
 
-            {/* Cart Label */}
+            {/* Enquiries Label */}
             <span className="text-xs font-bold text-stone-800 font-sans tracking-wide">
-              Cart
+              Enquiries
             </span>
 
             {/* Counter Badge */}
@@ -311,7 +338,7 @@ export default function Header() {
             </span>
           </button>
 
-          {/* 4. More Options Dropdown */}
+          {/* 5. More Options Dropdown */}
           <div className="relative hidden sm:block">
             <button
               onClick={() => toggleDropdown('more')}
@@ -359,27 +386,18 @@ export default function Header() {
 
                   <div className="h-[1px] bg-stone-100 my-1"></div>
 
-                  {/* Currency Selector */}
-                  <div className="px-3 py-1.5">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block mb-1.5">Currency</span>
-                    <div className="grid grid-cols-3 gap-1">
-                      {['INR', 'USD', 'AED'].map((curr) => (
-                        <button
-                          key={curr}
-                          onClick={() => {
-                            setSelectedCurrency(curr);
-                            setActiveDropdown(null);
-                          }}
-                          className={`py-1 text-center rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            selectedCurrency === curr
-                              ? 'bg-olive-750 text-white shadow-2xs'
-                              : 'bg-stone-50 text-stone-700 hover:bg-stone-100'
-                          }`}
-                        >
-                          {curr} ({curr === 'INR' ? '₹' : curr === 'USD' ? '$' : 'AED'})
-                        </button>
-                      ))}
-                    </div>
+                  {/* Direct Admin Helpline */}
+                  <div className="px-3 py-2 bg-stone-50 rounded-xl m-1">
+                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-wider block mb-0.5">Direct Enquiry Helpline</span>
+                    <a
+                      href="https://wa.me/918867171060"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs font-extrabold text-emerald-700 hover:underline block"
+                    >
+                      +91 88671 71060 (WhatsApp)
+                    </a>
+                    <span className="text-[10px] text-stone-500 block mt-0.5">Admin direct support</span>
                   </div>
                 </div>
               </div>

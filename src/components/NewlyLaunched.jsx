@@ -162,15 +162,13 @@ export default function NewlyLaunched() {
                         </div>
 
                         <div>
-                          <div className="flex items-baseline gap-2 mb-2.5">
-                            <span className="text-[14px] font-extrabold text-gray-900 font-sans">
-                              ₹{Number(item.price).toLocaleString('en-IN')}
+                          <div className="flex items-center gap-1.5 mb-2.5">
+                            <span className="text-[10px] font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+                              New Collection
                             </span>
-                            {item.originalPrice && item.originalPrice > item.price && (
-                              <span className="text-[11px] text-gray-400 line-through font-sans">
-                                ₹{Number(item.originalPrice).toLocaleString('en-IN')}
-                              </span>
-                            )}
+                            <span className="text-[10px] text-gray-500 font-medium">
+                              • Direct Enquiry
+                            </span>
                           </div>
 
                           <button

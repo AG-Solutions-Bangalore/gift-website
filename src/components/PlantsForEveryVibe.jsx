@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Flame, ArrowRight, Eye, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, ArrowRight, Eye, ShoppingBag, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
@@ -8,7 +8,11 @@ import FixedImage from './common/FixedImage';
 const CARD_GAP = 20; // px between cards
 const VISIBLE = 5;  // cards visible on desktop
 
-export default function PlantsForEveryVibe({ title = "Vacuum Insulated Flasks & Bottles", subtitle = "Keep beverages piping hot or icy cold all day long — high grade 304/316 stainless steel", categorySlug = "vacuum-insulated" }) {
+export default function PlantsForEveryVibe({ 
+  title = "Luxury Chocolates & Celebration Hampers", 
+  subtitle = "Indulgent Ferrero Rocher collections, handcrafted gourmet boxes & festive gift combos", 
+  categorySlug = "chocolates" 
+}) {
   const { products: apiProducts, loading } = useProducts();
   const { openProductModal, addToCart } = useCart();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,14 +21,25 @@ export default function PlantsForEveryVibe({ title = "Vacuum Insulated Flasks & 
 
   const rawProducts = Array.isArray(apiProducts) ? apiProducts : [];
 
-  // Dynamically filter products related to bottles/flasks
-  const bottleProducts = rawProducts.filter(p => {
+  // Dynamically filter products related to chocolates, hampers, and keepsakes
+  const chocolateProducts = rawProducts.filter(p => {
     const name = (p.name || '').toLowerCase();
     const cat = (p.category || '').toLowerCase();
-    return name.includes('flask') || name.includes('bottle') || name.includes('vacuum') || name.includes('hydra') || name.includes('trek') || cat.includes('vacuum') || cat.includes('bottle');
+    const subCat = (p.subCategory || '').toLowerCase();
+    const brand = (p.brand || '').toLowerCase();
+    return (
+      cat.includes('chocolate') || 
+      subCat.includes('chocolate') || 
+      name.includes('chocolate') || 
+      name.includes('ferrero') || 
+      name.includes('combo') || 
+      name.includes('hamper') ||
+      brand.includes('ferrero') ||
+      brand.includes('dairymilk')
+    );
   }).slice(0, 15);
 
-  const displayList = bottleProducts.length > 0 ? bottleProducts : rawProducts.slice(20, 35);
+  const displayList = chocolateProducts.length > 0 ? chocolateProducts : rawProducts.slice(10, 25);
 
   const maxIndex = Math.max(displayList.length - VISIBLE, 0);
   const showLeft = currentIndex > 0;
@@ -65,9 +80,9 @@ export default function PlantsForEveryVibe({ title = "Vacuum Insulated Flasks & 
         {/* Section Heading */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wider mb-1.5">
-              <Flame className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Hot & Cold 24 Hours</span>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800 uppercase tracking-wider mb-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              <span>Gourmet Chocolates & Hampers</span>
             </div>
             <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">
               {title}
@@ -79,9 +94,9 @@ export default function PlantsForEveryVibe({ title = "Vacuum Insulated Flasks & 
 
           <Link 
             to={`/category/${categorySlug}`}
-            className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-emerald-900 hover:text-emerald-700 transition-colors group/header"
+            className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-amber-900 hover:text-amber-700 transition-colors group/header"
           >
-            Explore All Flasks
+            Explore All Chocolates
             <ArrowRight className="w-4 h-4 group-hover/header:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -160,15 +175,13 @@ export default function PlantsForEveryVibe({ title = "Vacuum Insulated Flasks & 
                       </p>
 
                       <div>
-                        <div className="flex items-baseline gap-2 mb-2.5">
-                          <span className="text-[14px] font-extrabold text-gray-900 font-sans">
-                            ₹{Number(item.price).toLocaleString('en-IN')}
+                        <div className="flex items-center gap-1.5 mb-2.5">
+                          <span className="text-[10px] font-bold text-emerald-900 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                            Living Greens
                           </span>
-                          {item.originalPrice && item.originalPrice > item.price && (
-                            <span className="text-[11px] text-gray-400 line-through font-sans">
-                              ₹{Number(item.originalPrice).toLocaleString('en-IN')}
-                            </span>
-                          )}
+                          <span className="text-[10px] text-gray-500 font-medium">
+                            • Hand-potted
+                          </span>
                         </div>
 
                         <button

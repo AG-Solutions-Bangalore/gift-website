@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight, Eye, ShoppingBag, Coffee } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Eye, ShoppingBag, Coffee, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
 import { useCategories } from '../context/CategoryContext';
@@ -101,9 +101,9 @@ export default function FlowersCollection({
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
           <div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-sky-800 uppercase tracking-wider mb-1.5">
-              <Coffee className="w-3.5 h-3.5 text-sky-600" />
-              <span>Signature Drinkware</span>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-rose-800 uppercase tracking-wider mb-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-rose-600 animate-pulse" />
+              <span>Fresh Floral Blooms</span>
             </div>
             <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900 tracking-tight flex items-center gap-2">
               {title}
@@ -115,9 +115,9 @@ export default function FlowersCollection({
 
           <Link 
             to={`/category/${categorySlug}`}
-            className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-sky-900 hover:text-sky-700 transition-colors group/header"
+            className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-rose-900 hover:text-rose-700 transition-colors group/header"
           >
-            Explore All Drinkware
+            Explore All Flowers
             <ArrowRight className="w-4 h-4 group-hover/header:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -196,15 +196,13 @@ export default function FlowersCollection({
                       </p>
 
                       <div>
-                        <div className="flex items-baseline gap-2 mb-2.5">
-                          <span className="text-[14px] font-extrabold text-gray-900 font-sans">
-                            ₹{Number(item.price).toLocaleString('en-IN')}
+                        <div className="flex items-center gap-1.5 mb-2.5">
+                          <span className="text-[10px] font-bold text-sky-800 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200">
+                            Fresh Blooms
                           </span>
-                          {item.originalPrice && item.originalPrice > item.price && (
-                            <span className="text-[11px] text-gray-400 line-through font-sans">
-                              ₹{Number(item.originalPrice).toLocaleString('en-IN')}
-                            </span>
-                          )}
+                          <span className="text-[10px] text-gray-500 font-medium">
+                            • Same Day Delivery
+                          </span>
                         </div>
 
                         <button

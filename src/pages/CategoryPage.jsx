@@ -7,6 +7,7 @@ import { useBrands } from '../context/BrandContext';
 import { useOccasions } from '../context/OccasionContext';
 import { useWebsite } from '../context/WebsiteContext';
 import FixedImage from '../components/common/FixedImage';
+import RecentlyViewed from '../components/RecentlyViewed';
 import { 
   Filter, 
   ChevronRight, 
@@ -575,12 +576,10 @@ export default function CategoryPage() {
       return true;
     });
 
-    // Sorting
     return result.sort((a, b) => {
-      if (sortBy === 'lowToHigh') return Number(a.price) - Number(b.price);
-      if (sortBy === 'highToLow') return Number(b.price) - Number(a.price);
       if (sortBy === 'rating') return Number(b.rating || 0) - Number(a.rating || 0);
       if (sortBy === 'newest') return (b.id || 0) - (a.id || 0);
+      if (sortBy === 'nameAsc') return (a.name || '').localeCompare(b.name || '');
       return (Number(b.rating || 0) * 10 + (b.reviewsCount || 0)) - (Number(a.rating || 0) * 10 + (a.reviewsCount || 0));
     });
   }, [baseCategoryProducts, minPrice, maxPrice, selectedSubcategories, selectedOccasions, selectedBrands, selectedTags, minRating, selectedDelivery, sortBy]);
@@ -686,11 +685,10 @@ export default function CategoryPage() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="appearance-none bg-white border border-stone-200 hover:border-olive-500 rounded-xl px-3.5 py-1.5 pr-8 text-xs font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-olive-500 cursor-pointer shadow-2xs transition-all"
                 >
-                  <option value="recommended">Recommended</option>
-                  <option value="lowToHigh">Price: Low to High</option>
-                  <option value="highToLow">Price: High to Low</option>
+                  <option value="recommended">Featured Collection</option>
                   <option value="rating">Customer Rating</option>
-                  <option value="newest">Newest Arrivals</option>
+                  <option value="newest">Newest Additions</option>
+                  <option value="nameAsc">Name: A to Z</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-stone-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -786,10 +784,10 @@ export default function CategoryPage() {
             onChange={(e) => setSortBy(e.target.value)}
             className="bg-transparent border-0 text-xs font-bold text-olive-700 focus:outline-none"
           >
-            <option value="recommended">Recommended</option>
-            <option value="lowToHigh">Price: Low to High</option>
-            <option value="highToLow">Price: High to Low</option>
+            <option value="recommended">Featured</option>
             <option value="rating">Rating</option>
+            <option value="newest">Newest</option>
+            <option value="nameAsc">Name: A-Z</option>
           </select>
         </div>
       </div>
@@ -821,94 +819,15 @@ export default function CategoryPage() {
 
             <div className="divide-y divide-stone-100 text-xs max-h-[calc(100vh-200px)] overflow-y-auto scrollbar-thin">
               
-              {/* 1. PRICE FILTER ACCORDION */}
-              <div className="p-5">
-                <div 
-                  onClick={() => toggleSection('price')}
-                  className="flex items-center justify-between cursor-pointer font-bold text-stone-900 text-[13px] mb-3 select-none"
-                >
-                  <span>Price Range</span>
-                  {openSections.price ? <ChevronUp className="w-4 h-4 text-stone-400" /> : <ChevronDown className="w-4 h-4 text-stone-400" />}
+              {/* Concierge & Enquiry Showcase Highlight */}
+              <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50/60 rounded-xl m-3 border border-amber-200/80">
+                <div className="flex items-center gap-1.5 font-extrabold text-amber-950 text-xs mb-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Enquiry Showcase</span>
                 </div>
-
-                {openSections.price && (
-                  <div className="space-y-4 animate-fade-in">
-                    <div className="flex items-end justify-between h-10 gap-1 px-1 bg-stone-50 rounded-lg p-1.5 border border-stone-100">
-                      {histogramBars.map((height, i) => (
-                        <div
-                          key={i}
-                          className="flex-1 bg-stone-300 hover:bg-olive-500 rounded-xs transition-colors"
-                          style={{ height: `${height}%` }}
-                        />
-                      ))}
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-[11px] font-semibold text-stone-400 mb-1">
-                        <span>₹{priceStats.min || 100}</span>
-                        <span>₹{priceStats.max || 5000}+</span>
-                      </div>
-                      <input
-                        type="range"
-                        min={priceStats.min || 100}
-                        max={priceStats.max || 5000}
-                        step={50}
-                        value={maxPrice}
-                        onChange={(e) => setMaxPrice(Number(e.target.value))}
-                        className="w-full accent-olive-600 cursor-pointer h-1.5 bg-stone-200 rounded-lg"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 pt-1">
-                      <div>
-                        <span className="text-[10px] font-bold text-stone-400 block mb-1">Minimum</span>
-                        <div className="flex items-center border border-stone-200 rounded-lg px-2.5 py-1.5 bg-stone-50/50">
-                          <span className="text-stone-400 mr-1">₹</span>
-                          <input
-                            type="number"
-                            value={minPrice}
-                            onChange={(e) => setMinPrice(Number(e.target.value))}
-                            className="w-full bg-transparent font-bold text-xs text-stone-800 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <span className="text-[10px] font-bold text-stone-400 block mb-1">Maximum</span>
-                        <div className="flex items-center border border-stone-200 rounded-lg px-2.5 py-1.5 bg-stone-50/50">
-                          <span className="text-stone-400 mr-1">₹</span>
-                          <input
-                            type="number"
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(Number(e.target.value))}
-                            className="w-full bg-transparent font-bold text-xs text-stone-800 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {[
-                        { label: 'Under ₹500', max: 500 },
-                        { label: '₹500 - ₹1000', min: 500, max: 1000 },
-                        { label: '₹1000 - ₹2000', min: 1000, max: 2000 },
-                        { label: '₹2000+', min: 2000, max: 10000 },
-                      ].map((chip) => (
-                        <button
-                          key={chip.label}
-                          type="button"
-                          onClick={() => {
-                            if (chip.min) setMinPrice(chip.min);
-                            if (chip.max) setMaxPrice(chip.max);
-                          }}
-                          className="text-[10px] font-semibold px-2 py-1 rounded-md bg-stone-100 hover:bg-olive-50 hover:text-olive-700 text-stone-600 transition-colors cursor-pointer"
-                        >
-                          {chip.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <p className="text-[11px] text-amber-900 leading-relaxed">
+                  Browse our handcrafted collections. Shortlist any gifts you like and submit an enquiry—our team will connect with you directly with custom quotes &amp; samples.
+                </p>
               </div>
 
               {/* 2. CATEGORIES FILTER */}
@@ -1219,12 +1138,6 @@ export default function CategoryPage() {
                     <X className="w-3 h-3 cursor-pointer hover:text-rose-600" onClick={() => handleToggleTag(t)} />
                   </span>
                 ))}
-                {(minPrice > (priceStats.min || 0) || maxPrice < (priceStats.max || 50000)) && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-olive-50 text-olive-800 text-xs font-bold border border-olive-200">
-                    ₹{minPrice} - ₹{maxPrice}
-                    <X className="w-3 h-3 cursor-pointer hover:text-rose-600" onClick={() => { setMinPrice(priceStats.min || 0); setMaxPrice(priceStats.max || 50000); }} />
-                  </span>
-                )}
                 {minRating > 0 && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-olive-50 text-olive-800 text-xs font-bold border border-olive-200">
                     {minRating}★ & Above
@@ -1250,7 +1163,7 @@ export default function CategoryPage() {
                   No Matching Gifts Found
                 </h3>
                 <p className="text-xs text-stone-500 mb-6 max-w-sm">
-                  We couldn't find any products matching your selected filters. Try loosening the price range or filters.
+                  We couldn't find any products matching your selected filters. Try loosening your filters.
                 </p>
                 <button
                   onClick={handleResetFilters}
@@ -1265,13 +1178,10 @@ export default function CategoryPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
               {filteredProducts.map((p) => {
                 const name = p.name || p.title || 'Curated Gift';
-                const price = Number(p.price || 0);
-                const originalPrice = Number(p.originalPrice || Math.round(price * 1.25));
                 const image = p.img || p.image;
                 const rating = p.rating || 4.8;
                 const reviews = p.reviewsCount || 48;
                 const tag = p.tag || 'Bestseller';
-                const discount = originalPrice > price ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
 
                 return (
                   <div
@@ -1316,32 +1226,29 @@ export default function CategoryPage() {
                         {/* Delivery speed line */}
                         <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
                           <Truck className="w-3.5 h-3.5" />
-                          <span>Earliest Delivery: Today</span>
+                          <span>Delivery: On Schedule</span>
                         </div>
 
-                        {/* Pricing */}
-                        <div className="flex items-baseline gap-2 pt-1">
-                          <span className="font-extrabold text-base text-gray-900">{formatPrice(price)}</span>
-                          {originalPrice > price && (
-                            <span className="text-xs text-stone-400 line-through">{formatPrice(originalPrice)}</span>
-                          )}
-                          {discount > 0 && (
-                            <span className="text-[11px] font-extrabold text-emerald-600">
-                              {discount}% OFF
-                            </span>
-                          )}
+                        {/* Showcase Badges */}
+                        <div className="flex items-center gap-2 pt-1">
+                          <span className="text-[11px] font-extrabold text-olive-800 bg-olive-50 border border-olive-200 px-2 py-0.5 rounded-md">
+                            Available on Enquiry
+                          </span>
+                          <span className="text-[10px] text-stone-500 font-medium">
+                            • Custom options
+                          </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Quick Add Button */}
+                    {/* Quick Enquiry Action */}
                     <div className="p-4 pt-0">
                       <button
-                        onClick={() => addToCart(p, 1)}
-                        className="w-full py-2.5 rounded-xl bg-olive-700 hover:bg-olive-800 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        onClick={() => openProductModal(p)}
+                        className="w-full py-2.5 rounded-xl bg-olive-750 hover:bg-olive-800 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
-                        Add to Cart
+                        Enquire About Gift
                       </button>
                     </div>
 
@@ -1353,6 +1260,9 @@ export default function CategoryPage() {
 
         </div>
       </div>
+
+      {/* ── RECENTLY VIEWED SECTION ── */}
+      <RecentlyViewed />
 
       {/* ── MOBILE FILTER DRAWER POPUP ── */}
       {isMobileFilterOpen && (
@@ -1458,21 +1368,6 @@ export default function CategoryPage() {
               </div>
             )}
 
-            {/* Mobile Price Slider */}
-            <div className="mb-5">
-              <h4 className="font-bold text-xs text-stone-900 uppercase tracking-wider mb-2">
-                Price: ₹{minPrice} - ₹{maxPrice}
-              </h4>
-              <input
-                type="range"
-                min={priceStats.min || 100}
-                max={priceStats.max || 5000}
-                step={50}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full accent-olive-600 cursor-pointer"
-              />
-            </div>
 
             {/* Apply / Reset Actions */}
             <div className="flex items-center gap-3 pt-3 border-t border-stone-100">

@@ -14,6 +14,7 @@ import NewlyLaunched from '../components/NewlyLaunched';
 import SaveMoreOffers from '../components/SaveMoreOffers';
 import PlantsForEveryVibe from '../components/PlantsForEveryVibe';
 import JoyfulGiftingStories from '../components/JoyfulGiftingStories';
+import RecentlyViewed from '../components/RecentlyViewed';
 import TrustStats from '../components/TrustStats';
 import ShopByBrands from '../components/ShopByBrands';
 
@@ -54,6 +55,7 @@ export default function HomePage() {
       <SaveMoreOffers />
       <PlantsForEveryVibe />
       <JoyfulGiftingStories />
+      <RecentlyViewed />
       <TrustStats />
       <ShopByBrands />
     </div>
