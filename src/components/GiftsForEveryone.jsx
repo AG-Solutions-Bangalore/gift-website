@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import FixedImage from './common/FixedImage';
 
@@ -83,15 +84,16 @@ export default function GiftsForEveryone({ data = DEFAULT_RECIPIENTS }) {
               }}
             >
               {recipients.map(person => (
-                <div
+                <Link
+                  to={`/search?q=${encodeURIComponent(person.label)}`}
                   key={person.id || person.label}
-                  className="flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer group"
+                  className="flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer group focus:outline-none"
                   style={{ width: cardWidth || `${100 / VISIBLE}%` }}
                 >
                   {/* Card */}
                   <div
                     className="relative w-full overflow-hidden rounded-[16px] group-hover:scale-[1.03]
-                      group-hover:shadow-md transition-all duration-200 bg-gray-50 flex items-center justify-center aspect-square"
+                      group-hover:shadow-md transition-all duration-200 bg-gray-50 flex items-center justify-center aspect-square border border-stone-100"
                   >
                     <FixedImage
                       src={person.img || person.image}
@@ -103,10 +105,10 @@ export default function GiftsForEveryone({ data = DEFAULT_RECIPIENTS }) {
                   </div>
 
                   {/* Label */}
-                  <p className="text-[13px] font-medium text-gray-600 font-sans text-center group-hover:text-gray-900 transition-colors">
+                  <p className="text-[13px] font-semibold text-gray-700 font-sans text-center group-hover:text-olive-750 transition-colors">
                     {person.label}
                   </p>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

@@ -1,23 +1,26 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX, Maximize2, Share2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX, Maximize2, Share2, Sparkles, ArrowRight } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 const DEFAULT_STORIES = [
   {
     id: 1,
     title: 'take a break - DRINK COFFEE IN YOUR PERSONALISED MUG',
     productName: 'Name Impressions Mug',
-    price: '₹249',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-[#1231]-400.mp4',
+    price: 249,
+    formattedPrice: '₹249',
+    img: '/images/home/GiftsForHim.png',
     bgGradient: 'from-amber-900/60 via-amber-800/20 to-black/70',
     thumbEmoji: '☕',
     thumb2Emoji: '🎁',
   },
   {
     id: 2,
-    title: 'Customised Jewellery from Giftora',
-    productName: 'Nuyug Solitaire Drop Pendant Set',
-    price: '₹1,049',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-[#1232]-400.mp4',
+    title: 'Customised Jewellery & Keepsakes',
+    productName: 'Royal Solitaire Pendant Set',
+    price: 1049,
+    formattedPrice: '₹1,049',
+    img: '/images/home/GiftsForHer.png',
     bgGradient: 'from-purple-900/60 via-purple-800/20 to-black/70',
     thumbEmoji: '💍',
     thumb2Emoji: '✨',
@@ -26,8 +29,9 @@ const DEFAULT_STORIES = [
     id: 3,
     title: 'Birthday bliss with decor & surprises',
     productName: 'Personalised Grace Mixed Rose Bouquet',
-    price: '₹1,199',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-[#1233]-400.mp4',
+    price: 1199,
+    formattedPrice: '₹1,199',
+    img: '/images/home/flower_coll_1.png',
     bgGradient: 'from-rose-900/60 via-pink-800/20 to-black/70',
     thumbEmoji: '💐',
     thumb2Emoji: '🎈',
@@ -36,29 +40,32 @@ const DEFAULT_STORIES = [
     id: 4,
     title: 'Enchanted Red Rose Arrangement',
     productName: 'Enchanted Red Rose Arrangement',
-    price: '₹1,049',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-[#1234]-400.mp4',
+    price: 1049,
+    formattedPrice: '₹1,049',
+    img: '/images/home/flower_coll_4.png',
     bgGradient: 'from-red-900/60 via-rose-800/20 to-black/70',
     thumbEmoji: '🌹',
     thumb2Emoji: '🕯️',
   },
   {
     id: 5,
-    title: 'House of Orchids Premium Collection',
-    productName: 'House of Orchids',
-    price: '₹2,899',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-[#1235]-400.mp4',
-    bgGradient: 'from-violet-900/60 via-fuchsia-800/20 to-black/70',
-    thumbEmoji: '🌸',
-    thumb2Emoji: '🏺',
+    title: 'Ferrero Rocher & Chocolate Treats',
+    productName: 'Luxury Celebration Chocolate Pack',
+    price: 1649,
+    formattedPrice: '₹1,649',
+    img: '/images/home/flower_coll_3.png',
+    bgGradient: 'from-amber-950/60 via-chocolate-800/20 to-black/70',
+    thumbEmoji: '🍫',
+    thumb2Emoji: '✨',
   },
   {
     id: 6,
     title: 'Special Birthday Cake Surprises',
-    productName: 'Berry Truffle Cake',
-    price: '₹699',
-    videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-[#1236]-400.mp4',
-    bgGradient: 'from-amber-950/60 via-chocolate-800/20 to-black/70',
+    productName: 'Strawberry Celebration Cake',
+    price: 699,
+    formattedPrice: '₹699',
+    img: '/images/home/flower_coll_2.png',
+    bgGradient: 'from-pink-950/60 via-rose-800/20 to-black/70',
     thumbEmoji: '🎂',
     thumb2Emoji: '🍓',
   }
@@ -68,6 +75,7 @@ const CARD_GAP = 20; // px between cards
 const VISIBLE  = 5;  // cards visible on desktop
 
 export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
+  const { openProductModal } = useCart();
   const stories = Array.isArray(data) && data.length > 0 ? data : DEFAULT_STORIES;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardWidth, setCardWidth]       = useState(0);
@@ -81,8 +89,11 @@ export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
 
   const measure = useCallback(() => {
     if (containerRef.current) {
-      const totalGap = CARD_GAP * (VISIBLE - 1);
-      setCardWidth((containerRef.current.clientWidth - totalGap) / VISIBLE);
+      const isMobile = window.innerWidth < 640;
+      const isTablet = window.innerWidth >= 640 && window.innerWidth < 1024;
+      const visibleCount = isMobile ? 1.8 : isTablet ? 3 : VISIBLE;
+      const totalGap = CARD_GAP * (Math.floor(visibleCount) - 1);
+      setCardWidth((containerRef.current.clientWidth - totalGap) / visibleCount);
     }
   }, []);
 
@@ -105,10 +116,15 @@ export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
   };
 
   return (
-    <div className="bg-white py-10 border-b border-gray-100 overflow-hidden">
+    <div className="bg-white py-12 border-b border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Heading */}
+        <div className="flex items-center gap-2 mb-1">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wider uppercase bg-rose-100 text-rose-800 flex items-center gap-1">
+            <Sparkles className="w-3 h-3" /> Real Gifting Moments
+          </span>
+        </div>
         <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900 mb-6">
           Joyful Gifting Stories
         </h2>
@@ -120,9 +136,9 @@ export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
           <button
             onClick={handlePrev}
             aria-label="Previous"
-            className={`absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full
+            className={`absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full
               bg-white shadow-md border border-gray-200 flex items-center justify-center
-              text-gray-600 hover:text-gray-900 transition-all duration-200
+              text-gray-600 hover:text-gray-900 transition-all duration-200 cursor-pointer
               ${showLeft ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
           >
             <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
@@ -199,7 +215,7 @@ export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
                     <div className="relative z-20 flex items-center justify-center my-auto">
                       <button
                         onClick={() => togglePlay(item.id)}
-                        className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-200"
+                        className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-200 cursor-pointer"
                         title={playingStates[item.id] ? "Pause" : "Play"}
                       >
                         {playingStates[item.id] ? (
@@ -212,7 +228,17 @@ export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
 
                     {/* Bottom Linked Product Pill Card */}
                     <div className="relative z-20 p-2">
-                      <div className="bg-white/95 backdrop-blur-md rounded-[14px] p-2 flex items-center justify-between gap-2 shadow-lg border border-white/50">
+                      <div 
+                        onClick={() => openProductModal({
+                          id: item.id + 200,
+                          name: item.productName,
+                          price: item.price || 999,
+                          originalPrice: Math.round((item.price || 999) * 1.3),
+                          img: item.img || '/images/home/flower_coll_1.png',
+                          category: 'Gifting Stories',
+                        })}
+                        className="bg-white/95 hover:bg-white backdrop-blur-md rounded-[14px] p-2 flex items-center justify-between gap-2 shadow-lg border border-white/50 cursor-pointer transition-all hover:scale-[1.02]"
+                      >
                         {/* Product Thumb 1 */}
                         <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0 text-base">
                           {item.thumbEmoji || '🎁'}
@@ -223,14 +249,14 @@ export default function JoyfulGiftingStories({ data = DEFAULT_STORIES }) {
                           <p className="text-[11px] font-bold text-gray-900 font-sans truncate leading-tight">
                             {item.productName}
                           </p>
-                          <p className="text-[10px] font-extrabold text-gray-700 font-sans leading-none mt-0.5">
-                            {item.price}
+                          <p className="text-[10px] font-bold text-olive-750 font-sans leading-none mt-0.5">
+                            Curated Gift • Enquire
                           </p>
                         </div>
 
-                        {/* Product Thumb 2 */}
-                        <div className="w-7 h-7 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center flex-shrink-0 text-sm">
-                          {item.thumb2Emoji || '✨'}
+                        {/* Arrow */}
+                        <div className="w-6 h-6 rounded-lg bg-olive-50 text-olive-750 flex items-center justify-center flex-shrink-0">
+                          <ArrowRight className="w-3 h-3" />
                         </div>
                       </div>
                     </div>

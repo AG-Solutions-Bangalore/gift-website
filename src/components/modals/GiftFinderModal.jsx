@@ -121,9 +121,9 @@ export default function GiftFinderModal() {
               </button>
               <button
                 onClick={handleNext}
-                className="flex-1 py-3.5 bg-olive-600 hover:bg-olive-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3.5 bg-olive-600 hover:bg-olive-700 text-white font-extrabold text-xs rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                Next: Select Budget
+                Next: View Gift Suggestions
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -134,8 +134,8 @@ export default function GiftFinderModal() {
         {step === 3 && (
           <div className="space-y-4 animate-fade-in">
             <div className="flex justify-between items-center">
-              <h4 className="font-bold text-sm text-gray-900">Top Recommended Matches for {recipient}</h4>
-              <button onClick={handleReset} className="text-xs text-olive-700 font-bold hover:underline">
+              <h4 className="font-bold text-sm text-gray-900">Curated Matches for {recipient} ({occasion})</h4>
+              <button onClick={handleReset} className="text-xs text-olive-700 font-bold hover:underline cursor-pointer">
                 Re-filter
               </button>
             </div>
@@ -149,9 +149,8 @@ export default function GiftFinderModal() {
                       {item.tag}
                     </span>
                     <h5 className="font-bold text-xs text-gray-900 truncate mt-1">{item.name}</h5>
-                    <div className="flex items-baseline gap-2 mt-0.5">
-                      <span className="font-extrabold text-xs text-olive-700">{formatPrice(item.price)}</span>
-                      <span className="text-[10px] text-stone-400 line-through">{formatPrice(item.originalPrice)}</span>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="font-bold text-[11px] text-olive-750">Available on Enquiry</span>
                     </div>
                   </div>
                   <button
@@ -159,9 +158,9 @@ export default function GiftFinderModal() {
                       closeFinder();
                       openProductModal(item);
                     }}
-                    className="px-3 py-2 bg-olive-600 hover:bg-olive-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex-shrink-0"
+                    className="px-3 py-2 bg-olive-600 hover:bg-olive-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors flex-shrink-0 cursor-pointer"
                   >
-                    View Gift
+                    Enquire Now
                   </button>
                 </div>
               ))}

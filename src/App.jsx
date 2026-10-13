@@ -23,6 +23,7 @@ import CorporateGifting from './pages/CorporateGifting';
 
 // Interactive Drawers & Modals
 import CartDrawer from './components/drawers/CartDrawer';
+import WishlistDrawer from './components/drawers/WishlistDrawer';
 import LocationModal from './components/modals/LocationModal';
 import ProductModal from './components/modals/ProductModal';
 import RemindersModal from './components/modals/RemindersModal';
@@ -64,6 +65,7 @@ export default function App() {
 
                       {/* Global Drawers & Modals */}
                       <CartDrawer />
+                      <WishlistDrawer />
                       <LocationModal />
                       <ProductModal />
                       <RemindersModal />

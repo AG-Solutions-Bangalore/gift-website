@@ -79,7 +79,7 @@ export default function FreshlyBakedCakes({
           <div>
             <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800 uppercase tracking-wider mb-1.5">
               <CookingPot className="w-3.5 h-3.5 text-amber-600" />
-              <span>Chef's Choice Collection</span>
+              <span>Artisanal Bakery & Treats</span>
             </div>
             <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-gray-900">
               {title}
@@ -93,7 +93,7 @@ export default function FreshlyBakedCakes({
             to={`/category/${categorySlug}`}
             className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-amber-900 hover:text-amber-700 transition-colors group/header"
           >
-            Explore All Cookware
+            Explore All Cakes
             <ArrowRight className="w-4 h-4 group-hover/header:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -172,15 +172,13 @@ export default function FreshlyBakedCakes({
                       </p>
 
                       <div>
-                        <div className="flex items-baseline gap-2 mb-2.5">
-                          <span className="text-[14px] font-extrabold text-gray-900 font-sans">
-                            ₹{Number(item.price).toLocaleString('en-IN')}
+                        <div className="flex items-center gap-1.5 mb-2.5">
+                          <span className="text-[10px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                            Artisanal Bakery
                           </span>
-                          {item.originalPrice && item.originalPrice > item.price && (
-                            <span className="text-[11px] text-gray-400 line-through font-sans">
-                              ₹{Number(item.originalPrice).toLocaleString('en-IN')}
-                            </span>
-                          )}
+                          <span className="text-[10px] text-gray-500 font-medium">
+                            • Freshly Baked
+                          </span>
                         </div>
 
                         <button

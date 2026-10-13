@@ -91,8 +91,7 @@ export default function BirthdayGifts() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
                   <span className="text-[10px] font-extrabold uppercase text-amber-300">Featured Gift</span>
-                  <span className="font-extrabold text-sm truncate">{displayList[0].name}</span>
-                  <span className="text-xs font-bold text-white">₹{Number(displayList[0].price).toLocaleString('en-IN')}</span>
+                  <span className="text-[10px] font-bold text-amber-200">Available on Enquiry</span>
                 </div>
               </div>
             )}
@@ -131,15 +130,10 @@ export default function BirthdayGifts() {
                     {card.name}
                   </h3>
                   
-                  <div className="pt-1.5 flex items-baseline justify-between">
-                    <span className="font-extrabold text-xs text-olive-800">
-                      ₹{Number(card.price).toLocaleString('en-IN')}
+                  <div className="pt-1.5 flex items-center gap-1.5">
+                    <span className="text-[10px] font-bold text-olive-800 bg-olive-50 px-2 py-0.5 rounded-md border border-olive-200">
+                      Available on Request
                     </span>
-                    {card.originalPrice && card.originalPrice > card.price && (
-                      <span className="text-[10px] text-stone-400 line-through">
-                        ₹{Number(card.originalPrice).toLocaleString('en-IN')}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>

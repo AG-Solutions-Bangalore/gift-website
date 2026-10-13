@@ -213,12 +213,10 @@ export default function BestSellers() {
                         </span>
                       )}
 
-                      {/* Discount Badge */}
-                      {discount > 0 && (
-                        <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-rose-600 text-white text-[9px] font-extrabold rounded-md shadow-xs">
-                          {discount}% OFF
-                        </span>
-                      )}
+                      {/* Showcase Badge */}
+                      <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-olive-750 text-white text-[9px] font-extrabold rounded-md shadow-xs">
+                        {product.tag || 'Curated'}
+                      </span>
 
                       {/* Quick view button overlay */}
                       <button 
@@ -245,15 +243,13 @@ export default function BestSellers() {
                       </div>
 
                       <div>
-                        <div className="flex items-baseline gap-2 mb-2.5">
-                          <span className="text-[14px] font-extrabold text-gray-900 font-sans">
-                            ₹{Number(product.price).toLocaleString('en-IN')}
+                        <div className="flex items-center gap-1.5 mb-2.5">
+                          <span className="text-[10px] font-bold text-olive-800 bg-olive-50 px-2 py-0.5 rounded-md border border-olive-200">
+                            Bestseller
                           </span>
-                          {product.originalPrice && product.originalPrice > product.price && (
-                            <span className="text-[11px] text-gray-400 line-through font-sans">
-                              ₹{Number(product.originalPrice).toLocaleString('en-IN')}
-                            </span>
-                          )}
+                          <span className="text-[10px] text-gray-500 font-medium">
+                            • Available on Request
+                          </span>
                         </div>
 
                         {/* Action Buttons */}

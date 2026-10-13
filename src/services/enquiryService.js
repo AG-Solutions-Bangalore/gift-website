@@ -13,8 +13,14 @@ const API_TOKEN = import.meta.env.VITE_API_TOKEN || '';
  * @param {string} params.address
  * @param {Array}  params.items
  */
-export async function createEnquiry({ name, mobile, address = '', items = [] }) {
+export async function createEnquiry(params = {}) {
   try {
+    // Support both raw schema keys and convenient shorthand keys
+    const name = params.enquiry_name || params.name || '';
+    const mobile = params.enquiry_mobile || params.mobile || params.phone || '';
+    const address = params.enquiry_address || params.address || '';
+    const rawItems = params.sub || params.items || [];
+
     if (!name || !name.trim()) {
       throw new Error('Please enter your full name.');
     }
@@ -33,15 +39,15 @@ export async function createEnquiry({ name, mobile, address = '', items = [] }) 
     }
 
     // Format sub items according to CRM schema
-    const sub = items && items.length > 0
-      ? items.map((item) => ({
-          enquiry_share_id: String(item.shareId || item.share_id || 1),
-          enquiry_product_id: String(item.productId || item.product_id || item.id || 1),
-          enquiry_product_variant_id: String(item.variantId || item.variant_id || 1),
-          enquiry_quantity: String(item.quantity || 1),
-          enquiry_mrp: String(item.originalPrice || item.mrp || item.price || 999),
-          enquiry_sale_price: String(item.price || item.sale_price || 999),
-          enquiry_bulk_price: String(item.bulkPrice || item.bulk_price || item.price || 999),
+    const sub = rawItems && rawItems.length > 0
+      ? rawItems.map((item) => ({
+          enquiry_share_id: String(item.enquiry_share_id ?? item.shareId ?? item.share_id ?? 1),
+          enquiry_product_id: String(item.enquiry_product_id ?? item.productId ?? item.product_id ?? item.id ?? 1),
+          enquiry_product_variant_id: String(item.enquiry_product_variant_id ?? item.variantId ?? item.variant_id ?? 1),
+          enquiry_quantity: String(item.enquiry_quantity ?? item.quantity ?? 1),
+          enquiry_mrp: String(item.enquiry_mrp ?? item.originalPrice ?? item.mrp ?? item.price ?? 999),
+          enquiry_sale_price: String(item.enquiry_sale_price ?? item.price ?? item.sale_price ?? 999),
+          enquiry_bulk_price: String(item.enquiry_bulk_price ?? item.bulkPrice ?? item.bulk_price ?? item.price ?? 999),
         }))
       : [
           {
@@ -70,15 +76,15 @@ export async function createEnquiry({ name, mobile, address = '', items = [] }) 
 
     const data = await response.json().catch(() => null);
 
-    if (!response.ok) {
-      const msg = data?.message || data?.error || `HTTP ${response.status}: Failed to submit enquiry`;
+    if (!response.ok || (data && data.code && data.code >= 400)) {
+      const msg = data?.message || data?.data?.message || data?.error || `HTTP ${response.status}: Failed to submit enquiry`;
       throw new Error(msg);
     }
 
     return {
       success: true,
       data,
-      message: data?.message || 'Your inquiry has been submitted successfully!',
+      message: data?.message || data?.data?.message || 'Your inquiry has been submitted successfully!',
     };
   } catch (error) {
     console.error('Failed to create enquiry:', error);
